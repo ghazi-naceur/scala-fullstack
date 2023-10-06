@@ -33,3 +33,15 @@ lazy val backend = project
       "ch.qos.logback" % "logback-classic" % logbackVersion
     )
   )
+
+lazy val domain = crossProject(JSPlatform, JVMPlatform)
+  .in(file("./domain"))
+  .settings(
+    libraryDependencies ++= Seq(
+      "org.http4s" %% "http4s-circe" % http4sVersion,
+      // Optional for auto-derivation of JSON codecs
+      "io.circe" %% "circe-generic" % "0.14.5",
+      // Optional for string interpolation to JSON model
+      "io.circe" %% "circe-literal" % "0.14.5"
+    )
+  )
