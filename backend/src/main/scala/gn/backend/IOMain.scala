@@ -1,18 +1,25 @@
 package gn.backend
 
 import cats.data.Kleisli
+import org.slf4j.{Logger, LoggerFactory}
 import cats.effect.{ExitCode, IO, IOApp}
+import gn.domain.SharedData
+import org.http4s.*
+import org.http4s.circe.*
+import org.http4s.implicits.*
+import org.http4s.dsl.io.*
+import org.http4s.dsl.impl./
 import org.http4s.{HttpRoutes, Request, Response}
 import org.http4s.blaze.server.BlazeServerBuilder
-import org.http4s.dsl.impl./
-import org.http4s.dsl.io.*
-import org.slf4j.{Logger, LoggerFactory}
-import org.http4s.*
+
+import io.circe.*
+import io.circe.syntax.*
 
 import scala.concurrent.duration.Duration
 object IOMain extends IOApp {
 
   private val logger: Logger = LoggerFactory.getLogger(getClass.toString)
+  given sharedDataDecoder: EntityDecoder[IO, SharedData] = jsonOf[IO, SharedData]
 
   private val httpRequests: Kleisli[IO, Request[IO], Response[IO]] = HttpRoutes
     .of[IO] {
@@ -20,7 +27,10 @@ object IOMain extends IOApp {
         logger.info("GET Request received : " + req.toString())
         Ok("Get result")
       case req @ POST -> Root / "backend" / "query" =>
-        Ok(s"Request: $req")
+        for {
+          sharedData <- req.as[SharedData]
+          resp <- Ok(s"Request: ${sharedData.asJson}")
+        } yield resp
     }
     .orNotFound
   override def run(args: List[String]): IO[ExitCode] =
