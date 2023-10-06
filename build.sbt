@@ -17,7 +17,9 @@ lazy val frontend = project
   .enablePlugins(ScalaJSPlugin)
   .settings(
     libraryDependencies ++= Seq(
+      // web framework (other choices are slinky, scala-js-react, outwatch...)
       "com.raquo" %%% "laminar" % laminarVersion,
+      // web component library (other (non-exclusive) choices are material-ui, bootstrap...)
       "be.doeraene" %%% "web-components-ui5" % webComponentsVersion
     ),
     scalaJSUseMainModuleInitializer := true
