@@ -22,6 +22,7 @@ lazy val frontend = project
     ),
     scalaJSUseMainModuleInitializer := true
   )
+  .dependsOn(domain.js)
 
 lazy val backend = project
   .in(file("./backend"))
@@ -33,6 +34,7 @@ lazy val backend = project
       "ch.qos.logback" % "logback-classic" % logbackVersion
     )
   )
+  .dependsOn(domain.jvm)
 
 lazy val domain = crossProject(JSPlatform, JVMPlatform)
   .in(file("./domain"))
