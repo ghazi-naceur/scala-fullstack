@@ -22,9 +22,14 @@ lazy val frontend = project
       // web component library (other (non-exclusive) choices are material-ui, bootstrap...)
       "be.doeraene" %%% "web-components-ui5" % webComponentsVersion
     ),
+    esModule,
     scalaJSUseMainModuleInitializer := true
   )
   .dependsOn(domain.js)
+
+def esModule = Def.settings(scalaJSLinkerConfig ~= {
+  _.withModuleKind(ModuleKind.ESModule)
+})
 
 lazy val backend = project
   .in(file("./backend"))
