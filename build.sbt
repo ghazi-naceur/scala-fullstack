@@ -39,7 +39,9 @@ lazy val backend = project
       "org.http4s" %% "http4s-blaze-server" % http4sVersion,
       "org.http4s" %% "http4s-dsl" % http4sVersion,
       "ch.qos.logback" % "logback-classic" % logbackVersion
-    )
+    ),
+    assembly / mainClass := Some("gn.backend.IOMain"),
+    assembly / assemblyJarName := "backend.jar"
   )
   .dependsOn(domain.jvm)
 
